@@ -1,5 +1,8 @@
 # limi-frontend club
 
+## Description
+- A vue 3 project，just for fun...
+
 ## Project setup
 ```
 yarn install
