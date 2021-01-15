@@ -6,7 +6,6 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import katex from 'katex'
 @Options({
   components: {}
 })
