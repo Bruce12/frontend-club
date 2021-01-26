@@ -1,4 +1,4 @@
-import { defineComponent, App } from 'vue'
+import { defineComponent, App, watch, ref } from 'vue'
 import svgError from '@/icons/svg/error.svg'
 import MAP from './modules'
 const svgIcon = defineComponent({
@@ -18,12 +18,16 @@ const svgIcon = defineComponent({
     }
   },
   setup(props) {
+    const svgData = ref(svgError)
     const svgDataFn = MAP[props.name]
-    let svgData = svgError
-    if (svgDataFn) svgData = svgDataFn()
-    return () => (
-      <icon width={ props.width } height={ props.height } data={svgData}></icon>
+    watch(
+      () => props.name,
+      (value) => {
+        svgData.value = MAP[value]()
+      }
     )
+    if (svgDataFn) svgData.value = svgDataFn()
+    return () => <icon width={ props.width } height={ props.height } data={svgData.value}></icon>
   }
 })
 const svgCompoents = {

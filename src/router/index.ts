@@ -1,12 +1,20 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import Loayout from '@/layout/index.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import(/* webpackChunkName "home" */'@/views/home/index.vue'),
-    meta: {
-      title: '首页'
-    }
+    component: Loayout,
+    redirect: '/dashboard',
+    children: [
+      {
+        path: '/dashboard',
+        component: () => import('@/views/index/index.vue'),
+        name: 'dashboard',
+        meta: {
+          title: '首页'
+        }
+      }
+    ]
   }
 ]
 

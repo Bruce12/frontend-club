@@ -7,7 +7,6 @@
 <style lang="less">
 @import url("./styles/index.less");
 .page_view {
-  padding: 10px;
   min-height: 80vh;
 }
 </style>

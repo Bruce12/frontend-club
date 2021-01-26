@@ -30,3 +30,9 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### 需求
+- 基础页面模板搭建
+- 首页
+- 用户基本信息页
+  + 修改昵称，密码，基本信息等

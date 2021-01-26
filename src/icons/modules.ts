@@ -8,6 +8,9 @@ const MAP = {
   xuanzeti: () => require('./svg/xuanzeti.svg'),
   paper: () => require('./svg/paper.svg'),
   plusRound: () => require('./svg/plus-round.svg'),
-  audio: () => require('./svg/audio.svg')
+  audio: () => require('./svg/audio.svg'),
+  hamburger: () => require('./svg/hamburger.svg'),
+  fullscreen: () => require('./svg/fullscreen.svg'),
+  exitFullscreen: () => require('./svg/exit-fullscreen.svg')
 }
 export default MAP
