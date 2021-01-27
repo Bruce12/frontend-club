@@ -1,6 +1,7 @@
 <template>
   <div
     class="app-wrapper"
+    :class="classObj"
   >
     <SideBar class="sidebar-container"/>
     <div
@@ -12,8 +13,10 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { NavBar, AppMain, SideBar } from './components'
+import { useStore } from 'vuex'
+import { sotreKey } from '@/store'
 export default defineComponent({
   components: {
     NavBar,
@@ -22,6 +25,14 @@ export default defineComponent({
   },
   setup() {
     //
+    const store = useStore(sotreKey)
+    return {
+      classObj: computed(() => {
+        return {
+          hideSidebar: !store.state.appModule.siderbar.opened
+        }
+      })
+    }
   }
 })
 </script>
@@ -49,5 +60,17 @@ export default defineComponent({
   z-index: 1001;
   overflow: hidden;
   background-color: royalblue;
+}
+// 隐藏
+.hideSidebar {
+  .main-container {
+    margin-left: 54px;
+  }
+  .sidebar-container {
+    width: 54px !important;
+  }
+  .fixed-header {
+    width: calc(100% - 54px);
+  }
 }
 </style>

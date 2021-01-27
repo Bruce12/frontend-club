@@ -2,6 +2,7 @@
   <div class="navBar">
     <Hamburger
       @toggleClick="toggleClick"
+      :isActive="siderbar.opened"
       class="hamburger-container"
     />
     <Breadcrumb
@@ -16,10 +17,12 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import Breadcrumb from '@/components/Breadcrumb/index.vue'
 import Hamburger from '@/components/Hamburger/index.vue'
 import FullScreen from '@/components/FullScreen/index.vue'
+import { useStore } from 'vuex'
+import { sotreKey } from '@/store'
 export default defineComponent({
   components: {
     Breadcrumb,
@@ -27,11 +30,13 @@ export default defineComponent({
     FullScreen
   },
   setup() {
+    const store = useStore(sotreKey)
     function toggleClick() {
-      console.log('我被点击了')
+      store.dispatch('appModule/ToggleSideBar')
     }
     return {
-      toggleClick
+      toggleClick,
+      siderbar: computed(() => store.state.appModule.siderbar)
     }
   }
 })
@@ -82,4 +87,5 @@ export default defineComponent({
     }
   }
 }
+
 </style>

@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import './registerServiceWorker'
-import store from './store'
+import { store, sotreKey } from './store'
 import ElementPlus from 'element-plus'
 import 'element-plus/lib/theme-chalk/index.css'
 import { VueSvgIconPlugin, setOptions } from '@yzfe/vue3-svgicon'
@@ -11,7 +11,7 @@ import svgCompoents from '@/icons'
 
 const app = createApp(App)
 permission(app)
-app.use(store)
+app.use(store, sotreKey)
 // install for vue
 app.use(ElementPlus)
 setOptions({

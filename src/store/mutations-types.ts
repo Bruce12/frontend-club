@@ -1,1 +1,1 @@
-export const PAPER_INDEX = 'paperIndex'
+export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR'
