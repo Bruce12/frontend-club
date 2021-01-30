@@ -14,6 +14,8 @@
         <FullScreen class="right-menu-item hover-effect" />
       </template>
     </div>
+    <router-link to="/others">Home</router-link><br/>
+     <router-link to="/ucSettting">ucSettting</router-link>
   </div>
 </template>
 <script lang="ts">

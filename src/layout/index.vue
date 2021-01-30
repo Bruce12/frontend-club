@@ -24,7 +24,6 @@ export default defineComponent({
     SideBar
   },
   setup() {
-    //
     const store = useStore(sotreKey)
     return {
       classObj: computed(() => {
@@ -59,7 +58,6 @@ export default defineComponent({
   left: 0;
   z-index: 1001;
   overflow: hidden;
-  background-color: royalblue;
 }
 // 隐藏
 .hideSidebar {

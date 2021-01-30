@@ -1,1 +1,4 @@
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR'
+export const SET_ROUTER = 'SET_ROUTER'
+export const SET_ININTED = 'SET_ININTED'
+export const SET_OTHER_ROUTES = 'SET_OTHER_ROUTES'

@@ -11,3 +11,10 @@ declare module '@vue/runtime-core' {
     $store: Store<State>
   }
 }
+// vue router
+declare module 'vue-router' {
+  interface RouteMeta {
+    title: string
+    hidden?: boolean
+  }
+}
