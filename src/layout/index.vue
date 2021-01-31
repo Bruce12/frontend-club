@@ -15,8 +15,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { NavBar, AppMain, SideBar } from './components'
-import { useStore } from 'vuex'
-import { sotreKey } from '@/store'
+import { appStore } from '@/store/modules/app'
 export default defineComponent({
   components: {
     NavBar,
@@ -24,11 +23,10 @@ export default defineComponent({
     SideBar
   },
   setup() {
-    const store = useStore(sotreKey)
     return {
       classObj: computed(() => {
         return {
-          hideSidebar: !store.state.appModule.siderbar.opened
+          hideSidebar: !appStore.siderbar.opened
         }
       })
     }

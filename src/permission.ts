@@ -1,25 +1,24 @@
 import router from '@/router'
-import { store } from '@/store'
+import { permissionStore } from '@/store/modules/permission'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
-import { App, markRaw } from 'vue'
+import { App, toRaw } from 'vue'
 nprogress.configure({ showSpinner: true })
 // 路由登录做校验，校验用户权限
 export const permission = (app: App) => {
   router.beforeEach(async(to) => {
     // console.log('路由进入')z
     nprogress.start()
-    if (!store.state.permissionModule.isInited) {
-      store.dispatch('permissionModule/setInitStatus', true)
+    if (!permissionStore.isInited) {
+      permissionStore.setInitStatus(true)
       // 初始化菜单
-      await store.dispatch('permissionModule/generateRoutes')
+      await permissionStore.generateRoutes()
       // 替换
-      const routes = markRaw(store.state.permissionModule.routes)
-      const otherRoutes = markRaw(store.state.permissionModule.otherRoutes)
+      const routes = toRaw(permissionStore.routes)
+      const otherRoutes = toRaw(permissionStore.otherRoutes)
       ;[...routes, ...otherRoutes].forEach(item => {
         router.addRoute(item)
       })
-      console.log(store.state.permissionModule.routes)
       router.replace(to.fullPath)
     }
   })

@@ -1,9 +1,8 @@
 import Loayout from '@/layout/index.vue'
-import { Module } from 'vuex'
+import { VuexModule, getModule, Module, Mutation, Action } from 'vuex-module-decorators'
 import { RouteRecordRaw } from 'vue-router'
 import asyncRoutes from '@/router/routes'
-import router from '@/router'
-import { SET_ROUTER, SET_ININTED, SET_OTHER_ROUTES } from '../mutations-types'
+import store from '@/store'
 
 export interface IPermissionState {
   isInited: boolean
@@ -32,104 +31,106 @@ export const routerCcofnig: RoterConfigRaw[] = [
   { id: 11, parentId: 4, path: '/ucSettting' }
 ]
 
-export const permissionModule: Module<IPermissionState, any> = {
-  namespaced: true,
-  state: {
-    isInited: false,
-    routes: [],
-    otherRoutes: []
-  },
-  mutations: {
-    [SET_ROUTER](state, routers) {
-      state.routes = routers
-    },
-    [SET_ININTED](state, status) {
-      state.isInited = status
-    },
-    [SET_OTHER_ROUTES](state, routes) {
-      state.otherRoutes = routes
+@Module({ namespaced: true, store, name: 'permission', dynamic: true })
+class Permission extends VuexModule implements IPermissionState {
+  public isInited = false
+  public routes = []
+  public otherRoutes = []
+  @Mutation
+  SET_ROUTER(routers) {
+    this.routes = routers
+  }
+
+  @Mutation
+  SET_ININTED(status: boolean) {
+    this.isInited = status
+  }
+
+  @Mutation
+  SET_OTHER_ROUTES(routes) {
+    this.otherRoutes = routes
+  }
+
+  @Action
+  // 设置app初始化标识
+  setInitStatus(status: boolean) {
+    this.SET_ININTED(status)
+  }
+
+  @Action
+  // 生成路由 generateRoutes
+  async generateRoutes() {
+    const routes: any = []
+    const routerMap = {}
+    const otherRoutes: any = []
+    // 从数据库获取 routerconfig
+    const len = routerCcofnig.length
+    for (let i = 0; i < len; i++) {
+      const obj = routerCcofnig[i]
+      // 构建1级主菜单
+      if (obj.parentId === 0) {
+        routerMap[`_root_${obj.id}`] = {
+          path: obj.path,
+          component: Loayout,
+          name: `root_${obj.id}`,
+          meta: {
+            icon: obj.icon,
+            title: obj.title
+          },
+          children: []
+        }
+      }
     }
-  },
-  actions: {
-    // 设置app初始化标识
-    setInitStatus({ commit }, status) {
-      commit(SET_ININTED, status)
-    },
-    // 生成路由 generateRoutes
-    async generateRoutes({ commit }) {
-      const routes: any = []
-      const routerMap = {}
-      const otherRoutes: any = []
-      // 从数据库获取 routerconfig
-      const len = routerCcofnig.length
-      for (let i = 0; i < len; i++) {
-        const obj = routerCcofnig[i]
-        // 构建1级主菜单
-        if (obj.parentId === 0) {
-          routerMap[`_root_${obj.id}`] = {
-            path: obj.path,
-            component: Loayout,
-            name: `root_${obj.id}`,
-            meta: {
-              icon: obj.icon,
-              title: obj.title
-            },
-            children: []
-          }
-        }
-      }
-      // 构建子菜单
-      for (let i = 0; i < len; i++) {
-        const obj = routerCcofnig[i]
-        if (obj.parentId === 0 || !obj.path) continue
-        for (const key of Object.keys(asyncRoutes)) {
-          const o = asyncRoutes[key]
-          if (o.path === obj.path) {
-            // 子组件
-            const sub = {
-              ...o,
-              meta: {
-                ...o.meta,
-                title: obj.title || o.meta.title
-              }
-            }
-            console.log(obj.parentId)
-            routerMap[`_root_${obj.parentId}`].children.push(sub)
-            // 已经初始化
-            o.inited = true
-          }
-        }
-      }
-      // 注册路由 带菜单
-      for (const key in routerMap) {
-        routes.push(routerMap[key])
-      }
-      for (const key in asyncRoutes) {
+    // 构建子菜单
+    for (let i = 0; i < len; i++) {
+      const obj = routerCcofnig[i]
+      if (obj.parentId === 0 || !obj.path) continue
+      for (const key of Object.keys(asyncRoutes)) {
         const o = asyncRoutes[key]
-        if (!o.inited) {
-          console.log(o)
-          if (!o.meta.hidden) {
-            otherRoutes.push({
-              path: o.path,
-              component: Loayout,
-              redirect: o.path,
-              children: [o]
-            })
-          } else {
-            otherRoutes.push(o)
+        if (o.path === obj.path) {
+          // 子组件
+          const sub = {
+            ...o,
+            meta: {
+              ...o.meta,
+              title: obj.title || o.meta.title
+            }
           }
+          routerMap[`_root_${obj.parentId}`].children.push(sub)
+          // 已经初始化
+          o.inited = true
         }
       }
-      // 模拟从数据库中获取
-      const prosi = new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({})
-        }, 2000)
-      })
-      // 注册路由 (提取出去，setRouter )
-      const a = await prosi
-      commit(SET_ROUTER, routes)
-      commit(SET_OTHER_ROUTES, otherRoutes)
     }
+    // 注册路由 带菜单
+    for (const key in routerMap) {
+      routes.push(routerMap[key])
+    }
+    for (const key in asyncRoutes) {
+      const o = asyncRoutes[key]
+      if (!o.inited) {
+        if (!o.meta.hidden) {
+          otherRoutes.push({
+            path: o.path,
+            component: Loayout,
+            redirect: o.path,
+            children: [o]
+          })
+        } else {
+          otherRoutes.push(o)
+        }
+      }
+    }
+    // 模拟从数据库中获取
+    const prosi = new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({})
+      }, 2000)
+    })
+    // 注册路由 (提取出去，setRouter )
+    const a = await prosi
+    this.SET_ROUTER(routes)
+    this.SET_OTHER_ROUTES(otherRoutes)
   }
 }
+export const permissionStore = getModule<Permission>(Permission)

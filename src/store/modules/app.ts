@@ -1,7 +1,6 @@
-import { Module } from 'vuex'
-import { TOGGLE_SIDEBAR } from '../mutations-types'
+import { VuexModule, getModule, Module, Mutation, Action } from 'vuex-module-decorators'
 import { getSidebarStatus, setSidebarStatus } from '@/utils/cookie'
-
+import store from '@/store'
 export enum DeviceType {
   Mobile,
   Desktop
@@ -13,29 +12,27 @@ export interface IAppState {
     opened: boolean
   }
 }
+@Module({ namespaced: true, store, name: 'app', dynamic: true })
+class App extends VuexModule implements IAppState {
+  public device = DeviceType.Desktop
+  public siderbar = {
+    opened: getSidebarStatus() !== 'closed'
+  }
 
-// 应用程序全局变量
-export const appModule: Module<IAppState, any> = {
-  namespaced: true,
-  state: {
-    siderbar: {
-      opened: getSidebarStatus() !== 'closed'
-    },
-    device: DeviceType.Desktop
-  },
-  mutations: {
-    [TOGGLE_SIDEBAR](state) {
-      state.siderbar.opened = !state.siderbar.opened
-      if (state.siderbar.opened) {
-        setSidebarStatus('opened')
-      } else {
-        setSidebarStatus('closed')
-      }
-    }
-  },
-  actions: {
-    ToggleSideBar({ commit }) {
-      commit(TOGGLE_SIDEBAR)
+  @Mutation
+  TOGGLE_SIDEBAR() {
+    this.siderbar.opened = !this.siderbar.opened
+    if (this.siderbar.opened) {
+      setSidebarStatus('opened')
+    } else {
+      setSidebarStatus('closed')
     }
   }
+
+  @Action
+  toggleSideBar() {
+    this.TOGGLE_SIDEBAR()
+  }
 }
+
+export const appStore = getModule<App>(App)

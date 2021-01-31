@@ -1,18 +1,8 @@
-import { createStore, Store } from 'vuex'
-import { InjectionKey } from 'vue'
-import { appModule, IAppState } from './modules/app'
-import { permissionModule, IPermissionState } from './modules/permission'
+import { createStore } from 'vuex'
+import { config } from 'vuex-module-decorators'
 
-export interface IStoreState {
-  appModule: IAppState,
-  permissionModule: IPermissionState
-}
+config.rawError = true
 
-export const sotreKey: InjectionKey<Store<IStoreState>> = Symbol('')
+// export const sotreKey: InjectionKey<Store<IStoreState>> = Symbol('')
 
-export const store = createStore<IStoreState>({
-  modules: {
-    appModule,
-    permissionModule
-  }
-})
+export default createStore({})

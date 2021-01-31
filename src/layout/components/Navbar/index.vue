@@ -23,8 +23,7 @@ import { defineComponent, computed } from 'vue'
 import Breadcrumb from '@/components/Breadcrumb/index.vue'
 import Hamburger from '@/components/Hamburger/index.vue'
 import FullScreen from '@/components/FullScreen/index.vue'
-import { useStore } from 'vuex'
-import { sotreKey } from '@/store'
+import { appStore } from '@/store/modules/app'
 export default defineComponent({
   components: {
     Breadcrumb,
@@ -32,13 +31,12 @@ export default defineComponent({
     FullScreen
   },
   setup() {
-    const store = useStore(sotreKey)
     function toggleClick() {
-      store.dispatch('appModule/ToggleSideBar')
+      appStore.toggleSideBar()
     }
     return {
       toggleClick,
-      siderbar: computed(() => store.state.appModule.siderbar)
+      siderbar: computed(() => appStore.siderbar)
     }
   }
 })

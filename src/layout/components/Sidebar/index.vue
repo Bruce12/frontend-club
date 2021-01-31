@@ -17,8 +17,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import SiderbarItem from './SidebarItem.vue'
-import { useStore } from 'vuex'
-import { sotreKey } from '@/store'
+import { appStore } from '@/store/modules/app'
 import { useRoute } from 'vue-router'
 export default defineComponent({
   name: 'SideBar',
@@ -26,11 +25,10 @@ export default defineComponent({
     SiderbarItem
   },
   setup() {
-    const store = useStore(sotreKey)
     const { meta, path } = useRoute()
     return {
       isCollapse: computed(() => {
-        return !store.state.appModule.siderbar.opened
+        return !appStore.siderbar.opened
       }),
       activeMenu: computed(() => {
         // 当前处于激活状态的菜单
