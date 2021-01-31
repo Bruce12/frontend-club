@@ -15,6 +15,14 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         }
       }
     ]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: () => import('@/views/error_page/index.vue'),
+    meta: {
+      title: 'notFound'
+    }
   }
 ]
 

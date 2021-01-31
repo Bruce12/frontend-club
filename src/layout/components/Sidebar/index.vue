@@ -10,7 +10,13 @@
       :collapse-transition="false"
       mode="vertical"
     >
-      <SiderbarItem />
+      <SiderbarItem
+        v-for="route in routes"
+        :key="route.path"
+        :item="route"
+        :base-path="route.path"
+        :is-collapse="isCollapse"
+      />
     </el-menu>
   </el-scrollbar>
 </template>
@@ -19,6 +25,7 @@ import { defineComponent, computed } from 'vue'
 import SiderbarItem from './SidebarItem.vue'
 import { appStore } from '@/store/modules/app'
 import { useRoute } from 'vue-router'
+import { permissionStore } from '@/store/modules/permission'
 export default defineComponent({
   name: 'SideBar',
   components: {
@@ -34,7 +41,8 @@ export default defineComponent({
         // 当前处于激活状态的菜单
         if (meta.activeMenu) return meta.activeMenu
         return path
-      })
+      }),
+      routes: computed(() => permissionStore.routes)
     }
   }
 })

@@ -7,7 +7,6 @@ nprogress.configure({ showSpinner: true })
 // 路由登录做校验，校验用户权限
 export const permission = (app: App) => {
   router.beforeEach(async(to) => {
-    // console.log('路由进入')z
     nprogress.start()
     if (!permissionStore.isInited) {
       permissionStore.setInitStatus(true)
@@ -19,7 +18,8 @@ export const permission = (app: App) => {
       ;[...routes, ...otherRoutes].forEach(item => {
         router.addRoute(item)
       })
-      router.replace(to.fullPath)
+      // return true
+      return to.fullPath
     }
   })
   router.afterEach((to) => {
