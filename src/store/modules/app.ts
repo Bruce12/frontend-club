@@ -20,7 +20,7 @@ class App extends VuexModule implements IAppState {
   }
 
   @Mutation
-  TOGGLE_SIDEBAR() {
+  private TOGGLE_SIDEBAR() {
     this.siderbar.opened = !this.siderbar.opened
     if (this.siderbar.opened) {
       setSidebarStatus('opened')
@@ -29,9 +29,30 @@ class App extends VuexModule implements IAppState {
     }
   }
 
+  @Mutation
+  private CLOSE_SIDEBAR() {
+    this.siderbar.opened = false
+    setSidebarStatus('closed')
+  }
+
+  @Mutation
+  private TOGGLE_DEVICE(device: DeviceType) {
+    this.device = device
+  }
+
   @Action
-  toggleSideBar() {
+  public toggleSideBar() {
     this.TOGGLE_SIDEBAR()
+  }
+
+  @Action
+  public closeSideBar() {
+    this.CLOSE_SIDEBAR()
+  }
+
+  @Action
+  public toggleDevice(device: DeviceType) {
+    this.TOGGLE_DEVICE(device)
   }
 }
 

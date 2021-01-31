@@ -15,6 +15,5 @@ export default defineComponent({
 <style lang="less" scoped>
   .home {
     height: 100vh;
-    background-color: aqua;
   }
 </style>

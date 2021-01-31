@@ -48,7 +48,12 @@ export default defineComponent({
 })
 </script>
 <style lang="less" scoped>
-.scrollbar-wrapper {
-  overflow-x: hidden !important;
+/deep/ .el-scrollbar__view {
+  height: 100%
+}
+.el-menu {
+  border: none;
+  height: 100%;
+  width: 100% !important;
 }
 </style>

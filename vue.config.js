@@ -2,7 +2,7 @@
 const webpack = require('webpack')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const path = require('path')
-const name = '入学评测'
+const name = '前端club'
 const devServerPort = 3008
 const svgFilePath = path.resolve(__dirname, './src/icons/svg')
 module.exports = {

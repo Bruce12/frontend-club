@@ -3,6 +3,11 @@
     class="app-wrapper"
     :class="classObj"
   >
+   <div
+      v-if="classObj.mobile && sidebar.opened"
+      class="drawer-bg"
+      @click="handleClickOutside"
+    />
     <SideBar class="sidebar-container"/>
     <div
       class="main-container"
@@ -13,9 +18,10 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, watch, onUnmounted } from 'vue'
 import { NavBar, AppMain, SideBar } from './components'
-import { appStore } from '@/store/modules/app'
+import { useRoute } from 'vue-router'
+import { appStore, DeviceType } from '@/store/modules/app'
 export default defineComponent({
   components: {
     NavBar,
@@ -23,12 +29,47 @@ export default defineComponent({
     SideBar
   },
   setup() {
+    const device = computed(() => appStore.device)
+    const route = useRoute()
+    const sidebar = computed(() => appStore.siderbar)
+    const isMobile = () => {
+      const rect = document.body.getBoundingClientRect()
+      return rect.width - 1 < 992
+    }
+    const resizeHandler = () => {
+      const mobile = isMobile()
+      if (!document.hidden) {
+        appStore.toggleDevice(mobile ? DeviceType.Mobile : DeviceType.Desktop)
+        if (mobile) {
+          appStore.closeSideBar()
+        }
+      }
+    }
+    // 监听 route 路由的变化
+    watch(
+      () => route,
+      () => {
+        if (device.value === DeviceType.Mobile && sidebar.value.opened) {
+          appStore.closeSideBar()
+        }
+      }
+    )
+    // 监听 resize 事件
+    window.addEventListener('resize', resizeHandler)
+    onUnmounted(() => {
+      window.removeEventListener('resize', resizeHandler)
+    })
     return {
       classObj: computed(() => {
         return {
-          hideSidebar: !appStore.siderbar.opened
+          hideSidebar: !sidebar.value.opened,
+          mobile: device.value === DeviceType.Mobile
         }
-      })
+      }),
+      sidebar,
+      handleClickOutside: () => {
+        appStore.closeSideBar()
+      }
     }
   }
 })
@@ -68,5 +109,34 @@ export default defineComponent({
   .fixed-header {
     width: calc(100% - 54px);
   }
+}
+.mobile {
+  .main-container {
+    margin-left: 0px;
+  }
+  .sidebar-container {
+    transition: transform .28s;
+    width: var(--sider-bar-width) !important;
+  }
+  &.openSidebar {
+    position: fixed;
+    top: 0;
+  }
+  &.hideSidebar {
+    .sidebar-container {
+      pointer-events: none;
+      transition-duration: 0.3s;
+      transform: translate3d(calc(var(--sider-bar-width) -  var(--sider-bar-width) * 2), 0, 0);
+    }
+  }
+}
+.drawer-bg {
+  background: #000;
+  opacity: 0.3;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  position: absolute;
+  z-index: 999;
 }
 </style>
