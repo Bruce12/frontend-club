@@ -32,12 +32,12 @@ export default defineComponent({
     SiderbarItem
   },
   setup() {
-    const { meta, path } = useRoute()
     return {
       isCollapse: computed(() => {
         return !appStore.siderbar.opened
       }),
       activeMenu: computed(() => {
+        const { meta, path } = useRoute()
         // 当前处于激活状态的菜单
         if (meta.activeMenu) return meta.activeMenu
         return path
@@ -48,7 +48,7 @@ export default defineComponent({
 })
 </script>
 <style lang="less" scoped>
-/deep/ .el-scrollbar__view {
+:deep(.el-scrollbar__view) {
   height: 100%
 }
 .el-menu {

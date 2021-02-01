@@ -18,15 +18,15 @@ export interface RoterConfigRaw {
 }
 // 后台去配置这个roter
 export const routerCcofnig: RoterConfigRaw[] = [
-  { id: 1, parentId: 0, title: '用户管理', path: '', icon: 'el-icon-user-solid' },
+  { id: 1, parentId: 0, title: '用户管理', path: '', icon: 'international' },
   { id: 5, parentId: 1, path: '/user' },
   { id: 6, parentId: 1, path: '/userInfo' },
   { id: 7, parentId: 1, path: '/userGroup' },
-  { id: 2, parentId: 0, title: '文章管理', path: '', icon: 'el-icon-s-claim' },
+  { id: 2, parentId: 0, title: '文章管理', path: '', icon: 'money' },
   { id: 8, parentId: 2, path: '/article' },
-  { id: 3, parentId: 0, title: '笔记管理', path: '', icon: 'el-icon-s-order' },
+  { id: 3, parentId: 0, title: '笔记管理', path: '', icon: 'people' },
   { id: 9, parentId: 3, path: '/notes' },
-  { id: 4, parentId: 0, title: '组件管理', path: '', icon: 'el-icon-help' },
+  { id: 4, parentId: 0, title: '组件管理', path: '', icon: 'tiankongti' },
   { id: 10, parentId: 4, path: '/uc' },
   { id: 11, parentId: 4, path: '/ucSettting' }
 ]
@@ -70,7 +70,7 @@ class Permission extends VuexModule implements IPermissionState {
       // 构建1级主菜单
       if (obj.parentId === 0) {
         routerMap[`_root_${obj.id}`] = {
-          path: obj.path,
+          path: `/root_${obj.id}`,
           component: Loayout,
           name: `root_${obj.id}`,
           meta: {
@@ -96,7 +96,11 @@ class Permission extends VuexModule implements IPermissionState {
               title: obj.title || o.meta.title
             }
           }
-          routerMap[`_root_${obj.parentId}`].children.push(sub)
+          const routerObj = routerMap[`_root_${obj.parentId}`]
+          if (!routerObj.redirect) {
+            routerObj.redirect = o.path
+          }
+          routerObj.children.push(sub)
           // 已经初始化
           o.inited = true
         }
@@ -125,10 +129,11 @@ class Permission extends VuexModule implements IPermissionState {
     const prosi = new Promise((resolve) => {
       setTimeout(() => {
         resolve({})
-      }, 2000)
+      }, 1000)
     })
     // 注册路由 (提取出去，setRouter )
     const a = await prosi
+    console.log(routes)
     this.SET_ROUTER(routes)
     this.SET_OTHER_ROUTES(otherRoutes)
   }

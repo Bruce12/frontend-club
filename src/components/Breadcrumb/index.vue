@@ -4,45 +4,64 @@
     separator="/"
   >
     <transition-group name="breadcrumb">
-      <el-breadcrumb-item :to="{path: '/dashboard'}">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-      <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-      <el-breadcrumb-item>
-        <a href="">活动详情</a>
+      <el-breadcrumb-item
+        v-for="(item, index) in breadcrumbs"
+        :key="item.path"
+      >
+        <span
+          class="no-redirect"
+          v-if="item.redirect === 'noredirect' || index === breadcrumbs.length-1"
+        >
+          {{ item.meta.title }}
+        </span>
+        <a v-else @click.prevent="handleLink(item)">
+          {{ item.meta.title }}
+        </a>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
-import { useRoute, RouteLocationMatched } from 'vue-router'
+import { defineComponent, watch, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { compile } from 'path-to-regexp'
 export default defineComponent({
   name: 'Breadcrumb',
   setup() {
-    let breadcrumbs
+    const breadcrumbs = ref<any>([])
+    const route = useRoute()
+    const router = useRouter()
+    watch(
+      () => route.path,
+      (value) => {
+        if (value.startsWith('/redirect/')) return
+        getBreadcrumb()
+      }
+    )
     // 获取导航菜单
     function getBreadcrumb() {
-      const route = useRoute()
       let matched = route.matched.filter(item => item.meta && item.meta.title)
-      const first = matched[0]
-      if (!isDashboard(first)) {
-        // RouteLocationMatched
-        matched = [{ path: '/dashboard', meta: { title: 'dashboard' } } as any, ...matched]
-      }
-      breadcrumbs = reactive(matched.filter(item => {
+      matched = [{ path: '/dashboard', meta: { title: 'Dashboard' } } as any, ...matched]
+      breadcrumbs.value = matched.filter(item => {
         return item.meta && item.meta.title && item.meta.breadcrumb !== false
-      }))
+      })
       // 过滤
     }
-    // 是否是首页
-    function isDashboard(route: RouteLocationMatched) {
-      const name = (route && route.name as string)
-      if (!name) return false
-      return name.trim().toLocaleLowerCase() === 'dashboard'
+    function pathCompile(path: string) {
+      const { params } = route
+      const toPath = compile(path)
+      return toPath(params)
     }
     getBreadcrumb()
     return {
-      breadcrumbs
+      breadcrumbs,
+      handleLink: (item) => {
+        const { redirect, path } = item
+        if (redirect) {
+          router.push(redirect)
+        }
+        router.push(pathCompile(path))
+      }
     }
   }
 })

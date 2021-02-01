@@ -29,7 +29,8 @@ const router: RoterMap = {
     path: '/article',
     component: () => import('@/views/article/index.vue'),
     meta: {
-      title: '文章列表'
+      title: '文章列表',
+      icon: 'audio'
     }
   },
   notes: {

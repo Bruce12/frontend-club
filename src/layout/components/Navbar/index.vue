@@ -9,7 +9,7 @@
       class="breadcrumb-container"
     />
     <div class="right-menu">
-      <!--右边菜单-->
+      <!--右边菜单  用户便捷操作栏-->
       <template v-if="true">
         <FullScreen class="right-menu-item hover-effect" />
       </template>

@@ -26,11 +26,12 @@
     </template>
     <el-submenu
       v-else
-      :index="resolvePath(item.path)"
+      :index="item.path"
       popper-append-to-body
     >
       <template #title>
         <svgicon
+          class="svg-icon"
           v-if="item.meta && item.meta.icon"
           :name="item.meta.icon"
         />
@@ -105,12 +106,13 @@ export default defineComponent({
       if (isExternal(props.basePath)) {
         return props.basePath
       }
+
       return path.resolve(props.basePath, routePath)
     }
     return {
       showingChildNumber,
       theOnlyOneChild: computed(() => {
-        if (showingChildNumber.value > 1) {
+        if (showingChildNumber.value >= 1) {
           return null
         }
         if (props.item.children) {
@@ -127,21 +129,36 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="less">
+<style lang="less" scoped>
+.el-menu--vertical{
+  max-height: 100%;
+  overflow: auto;
+}
+:deep(.el-menu--popup .el-menu-item) {
+  height: 42px !important;
+  line-height: 42px !important;
+  padding-left: 24px !important;
+}
+:deep(.el-submenu .el-menu-item) {
+  height: 30px !important;
+  line-height: 30px !important;
+  padding-left: 24px !important;
+}
+:deep(.el-submenu.is-active > .el-submenu__title) {
+  color:#f4f4f5 !important;
+}
 .simple-mode {
   &.first-level {
-    .submenu-title-noDropdown {
+    :deep(.submenu-title-noDropdown) {
       padding: 0 !important;
       position: relative;
-
       .el-tooltip {
         padding: 0 !important;
       }
     }
 
-    .el-submenu {
+    :deep(.el-submenu) {
       overflow: hidden;
-
       &>.el-submenu__title {
         padding: 0px !important;
 
@@ -157,13 +174,25 @@ export default defineComponent({
   }
 }
 .full-mode {
-  .nest-menu .el-submenu>.el-submenu__title,
-  .el-submenu .el-menu-item {
+  :deep(.nest-menu .el-submenu>.el-submenu__title,
+  .el-submenu .el-menu-item) {
     min-width: var(--sider-bar-width) !important;
     background-color: #1f2d3d!important;
     &:hover {
       background-color: #001528 !important;
     }
   }
+}
+.svg-icon {
+  margin-right: 16px;
+}
+
+.simple-mode {
+  .svg-icon {
+    margin-left: 20px;
+  }
+}
+a {
+  text-decoration: none;
 }
 </style>

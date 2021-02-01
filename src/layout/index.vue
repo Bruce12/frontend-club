@@ -47,7 +47,7 @@ export default defineComponent({
     }
     // 监听 route 路由的变化
     watch(
-      () => route,
+      () => route.path,
       () => {
         if (device.value === DeviceType.Mobile && sidebar.value.opened) {
           appStore.closeSideBar()
