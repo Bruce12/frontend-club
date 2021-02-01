@@ -21,5 +21,6 @@ export default defineComponent({
 <style lang="less" scoped>
 .app-main {
   padding-left: 10px;
+  padding-top: 10px;
 }
 </style>

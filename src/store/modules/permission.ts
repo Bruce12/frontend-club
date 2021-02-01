@@ -25,10 +25,7 @@ export const routerCcofnig: RoterConfigRaw[] = [
   { id: 2, parentId: 0, title: '文章管理', path: '', icon: 'money' },
   { id: 8, parentId: 2, path: '/article' },
   { id: 3, parentId: 0, title: '笔记管理', path: '', icon: 'people' },
-  { id: 9, parentId: 3, path: '/notes' },
-  { id: 4, parentId: 0, title: '组件管理', path: '', icon: 'tiankongti' },
-  { id: 10, parentId: 4, path: '/uc' },
-  { id: 11, parentId: 4, path: '/ucSettting' }
+  { id: 9, parentId: 3, path: '/notes' }
 ]
 
 @Module({ namespaced: true, store, name: 'permission', dynamic: true })

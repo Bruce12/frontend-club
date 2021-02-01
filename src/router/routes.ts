@@ -11,20 +11,6 @@ const router: RoterMap = {
       title: '自定义图标'
     }
   },
-  uc: {
-    path: '/uc',
-    component: () => import('@/views/uc/index.vue'),
-    meta: {
-      title: '用户中心'
-    }
-  },
-  ucSettting: {
-    path: '/ucSettting',
-    component: () => import('@/views/uc/index.vue'),
-    meta: {
-      title: '用户设置'
-    }
-  },
   article: {
     path: '/article',
     component: () => import('@/views/article/index.vue'),
@@ -44,7 +30,7 @@ const router: RoterMap = {
     path: '/user',
     component: () => import('@/views/notes/index.vue'),
     meta: {
-      title: '用户管理'
+      title: '用户列表'
     }
   },
   userInfo: {

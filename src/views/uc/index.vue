@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    用户中心dfd
+    用户中心
   </div>
 </template>
 
