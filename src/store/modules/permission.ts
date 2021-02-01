@@ -19,13 +19,8 @@ export interface RoterConfigRaw {
 // 后台去配置这个roter
 export const routerCcofnig: RoterConfigRaw[] = [
   { id: 1, parentId: 0, title: '用户管理', path: '', icon: 'international' },
-  { id: 5, parentId: 1, path: '/user' },
-  { id: 6, parentId: 1, path: '/userInfo' },
-  { id: 7, parentId: 1, path: '/userGroup' },
-  { id: 2, parentId: 0, title: '文章管理', path: '', icon: 'money' },
-  { id: 8, parentId: 2, path: '/article' },
-  { id: 3, parentId: 0, title: '笔记管理', path: '', icon: 'people' },
-  { id: 9, parentId: 3, path: '/notes' }
+  { id: 5, parentId: 1, path: '/uc' },
+  { id: 6, parentId: 1, path: '/notes' }
 ]
 
 @Module({ namespaced: true, store, name: 'permission', dynamic: true })
